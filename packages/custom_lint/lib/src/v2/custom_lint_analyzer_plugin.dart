@@ -44,7 +44,6 @@ class CustomLintServer {
           delegate: delegate,
         );
         server._start(sendPort);
-
         return cb(server);
       },
       (err, stack) => server.handleUncaughtError(err, stack),
@@ -55,7 +54,6 @@ class CustomLintServer {
         ),
       ),
     );
-
     return result;
   }
 

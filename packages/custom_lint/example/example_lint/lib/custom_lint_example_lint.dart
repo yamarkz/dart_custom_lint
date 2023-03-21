@@ -40,6 +40,7 @@ class PreferFinalProviders extends DartLintRule {
   static const _code = LintCode(
     name: 'riverpod_final_provider',
     problemMessage: 'Providers should be declared using the `final` keyword.',
+    errorSeverity: ErrorSeverity.WARNING,
   );
 
   /// The core logic for our custom lint rule.
