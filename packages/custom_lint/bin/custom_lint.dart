@@ -8,12 +8,12 @@ Future<void> entrypoint([List<String> args = const []]) async {
   final parser = ArgParser()
     ..addFlag(
       'fatal-infos',
-      help: '',
+      help: 'Treat info level issues as fatal.',
       negatable: false,
     )
     ..addFlag(
       'fatal-warnings',
-      help: '',
+      help: 'Treat warning level issues as fatal.',
       defaultsTo: true,
     )
     ..addFlag(
