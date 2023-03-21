@@ -101,7 +101,7 @@ lib/custom_lint_client.dart:13:29: Error: Undefined name 'createPlugin'.
 
     await runWithIOOverride(
       (out, err) async {
-        await cli.entrypoint();
+        await cli.entrypoint(['--fatal-infos']);
 
         expect(err, emitsDone);
         expect(
@@ -300,7 +300,7 @@ void main() {
 
     await runWithIOOverride(
       (out, err) async {
-        await cli.entrypoint();
+        await cli.entrypoint(['--fatal-infos']);
 
         expect(exitCode, 1);
         expect(
