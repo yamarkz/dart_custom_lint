@@ -237,6 +237,7 @@ Bad state: fail
     final plugin = createPlugin(
       name: 'test_lint',
       main: '''
+import 'package:analyzer/error/error.dart';
 import 'package:analyzer/error/listener.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
@@ -248,7 +249,7 @@ class _HelloWorldLint extends PluginBase {
 }
 
 class _Lint extends DartLintRule {
-  const _Lint() : super(code: const LintCode(name: 'a', problemMessage: 'a'));
+  const _Lint() : super(code: const LintCode(name: 'a', problemMessage: 'a', errorSeverity: ErrorSeverity.WARNING));
 
   @override
   void run(
@@ -258,27 +259,27 @@ class _Lint extends DartLintRule {
   ) {
     final line2 = resolver.lineInfo.getOffsetOfLine(1);
     reporter.reportErrorForOffset(
-      const LintCode(name: 'x2', problemMessage: 'x2'),
+      const LintCode(name: 'x2', problemMessage: 'x2', errorSeverity: ErrorSeverity.WARNING),
       line2 + 1,
       1,
     );
     reporter.reportErrorForOffset(
-      const LintCode(name: 'a', problemMessage: 'a'),
+      const LintCode(name: 'a', problemMessage: 'a', errorSeverity: ErrorSeverity.WARNING),
       line2 + 1,
       1,
     );
     reporter.reportErrorForOffset(
-      const LintCode(name: 'x', problemMessage: 'x'),
+      const LintCode(name: 'x', problemMessage: 'x', errorSeverity: ErrorSeverity.WARNING),
       line2 + 1,
       1,
     );
     reporter.reportErrorForOffset(
-      const LintCode(name: 'y', problemMessage: 'y'),
+      const LintCode(name: 'y', problemMessage: 'y', errorSeverity: ErrorSeverity.WARNING),
       line2,
       1,
     );
     reporter.reportErrorForOffset(
-      const LintCode(name: 'z', problemMessage: 'z'),
+      const LintCode(name: 'z', problemMessage: 'z', errorSeverity: ErrorSeverity.WARNING),
       0,
       1,
     );
@@ -300,7 +301,7 @@ void main() {
 
     await runWithIOOverride(
       (out, err) async {
-        await cli.entrypoint(['--fatal-infos']);
+        await cli.entrypoint();
 
         expect(exitCode, 1);
         expect(
