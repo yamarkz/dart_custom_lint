@@ -23,6 +23,13 @@ final helloWordPluginSource = createPluginSource([
   )
 ]);
 
+final helloDartPluginSource = createPluginSource([
+  TestLintRule(
+    code: 'hello_dart',
+    message: 'Hello Dart',
+  )
+]);
+
 void main() {
   test('exits with 0 when no lint and no error are found', () async {
     final plugin = createPlugin(name: 'test_lint', main: emptyPluginSource);
@@ -83,6 +90,72 @@ lib/custom_lint_client.dart:13:29: Error: Undefined name 'createPlugin'.
           ),
         );
         expect(out, emitsDone);
+      },
+      currentDirectory: app,
+    );
+  });
+
+  test('exits with 0 when pass argument `--no-fatal-warnings`', () async {
+    final plugin = createPlugin(name: 'test_lint', main: helloWordPluginSource);
+
+    final app = createLintUsage(
+      source: {
+        'lib/main.dart': 'void fn() {}',
+      },
+      plugins: {'test_lint': plugin.uri},
+      name: 'test_app',
+    );
+
+    await runWithIOOverride(
+      (out, err) async {
+        await cli.entrypoint(['--no-fatal-warnings']);
+
+        expect(err, emitsDone);
+        expect(exitCode, 0);
+      },
+      currentDirectory: app,
+    );
+  });
+
+  test('exits with 1 when pass argument `--fatal-warnings`', () async {
+    final plugin = createPlugin(name: 'test_lint', main: helloWordPluginSource);
+
+    final app = createLintUsage(
+      source: {
+        'lib/main.dart': 'void fn() {}',
+      },
+      plugins: {'test_lint': plugin.uri},
+      name: 'test_app',
+    );
+
+    await runWithIOOverride(
+      (out, err) async {
+        await cli.entrypoint(['--fatal-warnings']);
+
+        expect(err, emitsDone);
+        expect(exitCode, 1);
+      },
+      currentDirectory: app,
+    );
+  });
+
+  test('exits with 1 when pass argument `--fatal-infos`', () async {
+    final plugin = createPlugin(name: 'test_lint', main: helloDartPluginSource);
+
+    final app = createLintUsage(
+      source: {
+        'lib/main.dart': 'void fn() {}',
+      },
+      plugins: {'test_lint': plugin.uri},
+      name: 'test_app',
+    );
+
+    await runWithIOOverride(
+      (out, err) async {
+        await cli.entrypoint(['--fatal-infos']);
+
+        expect(err, emitsDone);
+        expect(exitCode, 1);
       },
       currentDirectory: app,
     );
