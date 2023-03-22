@@ -11,6 +11,7 @@ final oyPluginSource = createPluginSource([
   TestLintRule(
     code: 'oy',
     message: 'Oy',
+    errorSeverity: 'ErrorSeverity.WARNING',
   )
 ]);
 
@@ -18,6 +19,7 @@ final helloWordPluginSource = createPluginSource([
   TestLintRule(
     code: 'hello_world',
     message: 'Hello world',
+    errorSeverity: 'ErrorSeverity.WARNING',
   )
 ]);
 
@@ -101,7 +103,7 @@ lib/custom_lint_client.dart:13:29: Error: Undefined name 'createPlugin'.
 
     await runWithIOOverride(
       (out, err) async {
-        await cli.entrypoint(['--fatal-infos']);
+        await cli.entrypoint();
 
         expect(err, emitsDone);
         expect(
